@@ -192,7 +192,7 @@ CHANGELOG = [
         [
             (
                 "Chapter 3",
-                "Complete visual redesign of Princetoxic Start."
+                "Complete visual redesign of Breeze Launcher."
             ),
             (
                 "Dark Glass",
@@ -225,7 +225,7 @@ CHANGELOG = [
         "🌱",
         [
             (
-                "Princetoxic Start",
+                "Breeze Launcher",
                 "Initial launcher release."
             ),
             (
@@ -300,7 +300,7 @@ class StartMenu(Gtk.Window):
     def __init__(self):
 
         super().__init__(
-            title="Princetoxic Start"
+            title="Breeze Launcher"
         )
 
         self.set_default_size(
@@ -530,7 +530,7 @@ class StartMenu(Gtk.Window):
 
         self.show_notification(
             "SUCCESS",
-            "Princetoxic Start loaded successfully."
+            "Breeze Launcher loaded successfully."
         )
 
         return False
@@ -1243,7 +1243,7 @@ class StartMenu(Gtk.Window):
         )
 
         brand = Gtk.Label(
-            label="--Princetoxic Start"
+            label="--Breeze Launcher"
         )
 
         brand.set_name(
@@ -2498,7 +2498,7 @@ class StartMenu(Gtk.Window):
     ):
 
         dialog = Gtk.Window(
-            title="Princetoxic Start Settings"
+            title="Breeze Launcher Settings"
         )
 
         dialog.set_default_size(
@@ -2734,7 +2734,7 @@ class StartMenu(Gtk.Window):
 
         add_setting(
             "🟢  Keep Launcher Alive",
-            "Keep Princetoxic Start open after launching an application.",
+            "Keep Breeze Launcher open after launching an application.",
             "keep_launcher_alive"
         )
 
@@ -2772,7 +2772,7 @@ class StartMenu(Gtk.Window):
     ):
 
         dialog = Gtk.Window(
-            title="Princetoxic Start Changelog"
+            title="Breeze Launcher Changelog"
         )
 
         dialog.set_default_size(
@@ -2824,7 +2824,7 @@ class StartMenu(Gtk.Window):
         )
 
         title = Gtk.Label(
-            label="📜  Princetoxic Start"
+            label="📜  Breeze Launcher"
         )
 
         title.set_name(
