@@ -1424,11 +1424,33 @@ class StartMenu(Gtk.Window):
             "media"
         )
 
-        self.media_title = Gtk.Label(
-            label="♫  Media"
+        self.media_player = Gtk.Label(
+            label="NO PLAYER"
         )
+        self.media_player.set_xalign(0)
 
-        self.media_artist = Gtk.Label()
+        self.media_title = Gtk.Label(
+            label="♫  No media playing"
+        )
+        self.media_title.set_xalign(0)
+        self.media_title.set_line_wrap(False)
+
+        self.media_artist = Gtk.Label(
+            label=""
+        )
+        self.media_artist.set_xalign(0)
+
+        self.media_status = Gtk.Label(
+            label=""
+        )
+        self.media_status.set_xalign(0)
+
+        media.pack_start(
+            self.media_player,
+            False,
+            False,
+            0
+        )
 
         media.pack_start(
             self.media_title,
@@ -1444,9 +1466,18 @@ class StartMenu(Gtk.Window):
             0
         )
 
+        media.pack_start(
+            self.media_status,
+            False,
+            False,
+            0
+        )
+
         controls = Gtk.Box(
             spacing=3
         )
+
+        self.media_buttons = {}
 
         for icon_name, command in [
             (
@@ -1469,6 +1500,14 @@ class StartMenu(Gtk.Window):
                 "button"
             )
 
+            button.set_tooltip_text(
+                {
+                    "previous": "Previous track",
+                    "play-pause": "Play / Pause",
+                    "next": "Next track",
+                }[command]
+            )
+
             button.set_image(
                 Gtk.Image.new_from_icon_name(
                     icon_name,
@@ -1481,6 +1520,8 @@ class StartMenu(Gtk.Window):
                 self.media_command,
                 command
             )
+
+            self.media_buttons[command] = button
 
             controls.pack_start(
                 button,
@@ -2311,56 +2352,126 @@ class StartMenu(Gtk.Window):
             "playerctl"
         ):
 
+            self.media_player.set_text("♫  playerctl not installed")
+            self.media_title.set_text("No media controls available")
+            self.media_artist.set_text("")
+            self.media_status.set_text("")
+
+            for button in self.media_buttons.values():
+                button.set_sensitive(False)
+
             return True
 
         try:
 
-            title = subprocess.check_output(
+            raw = subprocess.check_output(
                 [
                     "playerctl",
                     "metadata",
                     "--format",
-                    "{{ title }}"
+                    "{{ playerName }}\t{{ status }}\t{{ title }}\t{{ artist }}\t{{ album }}"
                 ],
                 stderr=subprocess.DEVNULL,
                 text=True,
-                timeout=0.4
+                timeout=0.6
             ).strip()
 
-            artist = subprocess.check_output(
-                [
-                    "playerctl",
-                    "metadata",
-                    "--format",
-                    "{{ artist }}"
-                ],
-                stderr=subprocess.DEVNULL,
-                text=True,
-                timeout=0.4
-            ).strip()
+            if not raw:
+                raise RuntimeError("No active player")
+
+            parts = raw.split("\t", 4)
+            while len(parts) < 5:
+                parts.append("")
+
+            player, status, title, artist, album = parts
+
+            title = title.strip()
+            artist = artist.strip()
+            album = album.strip()
+            status = status.strip().lower()
+            player = player.strip()
+
+            self.media_player.set_text(
+                "♫  " + (player or "Media player")
+            )
 
             if title:
-
                 self.media_title.set_text(
-                    "♫  " + title
+                    title
                 )
-
-                self.media_artist.set_text(
-                    artist
-                )
-
             else:
-
                 self.media_title.set_text(
-                    "♫  Media"
+                    "No title"
                 )
 
-                self.media_artist.set_text(
-                    ""
+            details = " • ".join(
+                item for item in (artist, album) if item
+            )
+
+            self.media_artist.set_text(
+                details
+            )
+
+            status_text = {
+                "playing": "▶ Playing",
+                "paused": "Ⅱ Paused",
+                "stopped": "■ Stopped",
+            }.get(
+                status,
+                status.title() if status else "Ready"
+            )
+
+            self.media_status.set_text(
+                status_text
+            )
+
+            for button in self.media_buttons.values():
+                button.set_sensitive(True)
+
+            play_button = self.media_buttons.get(
+                "play-pause"
+            )
+
+            if play_button:
+                icon = (
+                    "media-playback-pause-symbolic"
+                    if status == "playing"
+                    else "media-playback-start-symbolic"
+                )
+
+                play_button.set_image(
+                    Gtk.Image.new_from_icon_name(
+                        icon,
+                        Gtk.IconSize.BUTTON
+                    )
+                )
+
+                play_button.set_tooltip_text(
+                    "Pause"
+                    if status == "playing"
+                    else "Play"
                 )
 
         except Exception:
-            pass
+
+            self.media_player.set_text(
+                "♫  No media player"
+            )
+
+            self.media_title.set_text(
+                "Nothing is playing"
+            )
+
+            self.media_artist.set_text(
+                ""
+            )
+
+            self.media_status.set_text(
+                ""
+            )
+
+            for button in self.media_buttons.values():
+                button.set_sensitive(False)
 
         return True
 
