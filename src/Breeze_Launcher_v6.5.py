@@ -14,7 +14,7 @@ gi.require_version("Gdk", "3.0")
 from gi.repository import Gtk, Gdk, Gio, GLib, Pango
 
 
-VERSION = "v5.1"
+VERSION = "v6.2"
 
 SETTINGS_FILE = os.path.expanduser(
     "~/.config/rofi/chapter3_settings.json"
@@ -316,6 +316,21 @@ class StartMenu(Gtk.Window):
         self.set_resizable(False)
         self.set_keep_above(True)
         self.set_skip_taskbar_hint(True)
+
+        # Breeze Launcher icon
+        icon_path = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                "..",
+                "assets",
+                "breeze.png"
+            )
+        )
+        if os.path.exists(icon_path):
+            try:
+                self.set_icon_from_file(icon_path)
+            except Exception as error:
+                self.log_error("Launcher icon error: " + str(error))
 
         visual = self.get_screen().get_rgba_visual()
 
@@ -841,10 +856,10 @@ class StartMenu(Gtk.Window):
         }
 
         #top {
-            background-color: rgba(55,55,55,0.72);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 9px 13px;
+            background-color: rgba(25,31,43,0.68);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 20px;
+            padding: 10px 14px;
         }
 
         #brand {
@@ -864,19 +879,23 @@ class StartMenu(Gtk.Window):
         }
 
         #panel {
-            background-color: rgba(35,35,35,0.91);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 18px;
-            padding: 13px;
+            background-color: rgba(18,23,33,0.72);
+            border: 1px solid rgba(255,255,255,0.13);
+            border-radius: 22px;
+            padding: 14px;
         }
 
         #search {
-            background-color: rgba(15,15,15,0.72);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 8px 11px;
+            background-color: rgba(8,12,19,0.54);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 15px;
+            padding: 9px 12px;
             font-size: 13px;
             font-weight: 800;
+        }
+
+        #search:focus {
+            border: 1px solid rgba(170,220,255,0.30);
         }
 
         #section {
@@ -894,12 +913,13 @@ class StartMenu(Gtk.Window):
         }
 
         row:hover {
-            background-color: rgba(100,100,100,0.18);
+            background-color: rgba(150,205,255,0.085);
+            border: 1px solid rgba(255,255,255,0.075);
         }
 
         row:selected {
-            background-color: rgba(15,15,15,0.90);
-            border: 1px solid rgba(255,255,255,0.025);
+            background-color: rgba(125,190,245,0.13);
+            border: 1px solid rgba(185,225,255,0.20);
         }
 
         row label {
@@ -908,23 +928,23 @@ class StartMenu(Gtk.Window):
         }
 
         #button {
-            background-color: rgba(65,65,65,0.68);
-            border: 0;
-            border-radius: 11px;
-            padding: 6px 9px;
+            background-color: rgba(90,105,125,0.38);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 13px;
+            padding: 6px 10px;
             min-height: 30px;
             font-size: 11px;
             font-weight: 900;
         }
 
         #button:hover {
-            background-color: rgba(95,95,95,0.75);
-            border: 0;
+            background-color: rgba(125,160,190,0.42);
+            border: 1px solid rgba(210,235,255,0.18);
         }
 
         #button:active {
-            background-color: rgba(15,15,15,0.92);
-            border: 0;
+            background-color: rgba(70,90,110,0.52);
+            border: 1px solid rgba(255,255,255,0.12);
         }
 
         #button:focus {
@@ -934,40 +954,50 @@ class StartMenu(Gtk.Window):
         }
 
         #info {
-            background-color: rgba(55,55,55,0.62);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 11px;
-            padding: 8px;
+            background-color: rgba(35,45,58,0.44);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 14px;
+            padding: 9px;
             font-size: 9px;
             font-weight: 700;
         }
 
         #media {
-            background-color: rgba(25,25,25,0.48);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 11px;
-            padding: 8px;
+            background-color: rgba(17,23,33,0.48);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 15px;
+            padding: 9px;
         }
 
         #changelog_button {
-            background-color: rgba(65,65,65,0.68);
-            border: 0;
+            background-color: rgba(70,165,225,0.48);
+            border: 1px solid rgba(170,225,255,0.30);
             border-radius: 11px;
             padding: 6px 11px;
             min-height: 30px;
             font-size: 11px;
             font-weight: 900;
+            color: #e7f7ff;
         }
 
         #changelog_button:hover {
-            background-color: rgba(95,95,95,0.75);
+            background-color: rgba(90,185,240,0.62);
+            border-color: rgba(205,240,255,0.45);
+        }
+
+        #changelog_button:focus,
+        #changelog_button:active {
+            background-color: rgba(65,155,215,0.56);
+            border-color: rgba(180,230,255,0.36);
+            box-shadow: none;
+            outline: none;
         }
 
         #bottom {
-            background-color: rgba(48,48,48,0.84);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 15px;
-            padding: 4px;
+            background-color: rgba(25,31,42,0.62);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 18px;
+            padding: 5px;
         }
 
         #mac_close {
@@ -991,9 +1021,9 @@ class StartMenu(Gtk.Window):
         }
 
         #settings_button {
-            background-color: rgba(80,80,80,0.58);
-            border: 0;
-            border-radius: 10px;
+            background-color: rgba(90,110,135,0.36);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 12px;
             min-width: 38px;
             min-height: 30px;
             padding: 0;
@@ -1004,9 +1034,9 @@ class StartMenu(Gtk.Window):
         }
 
         #settings_panel {
-            background-color: rgba(45,43,52,0.94);
-            border: 0;
-            border-radius: 20px;
+            background-color: rgba(19,24,35,0.84);
+            border: 1px solid rgba(255,255,255,0.13);
+            border-radius: 22px;
             padding: 18px;
         }
 
@@ -1017,14 +1047,16 @@ class StartMenu(Gtk.Window):
         }
 
         #setting_row {
-            background-color: rgba(255,255,255,0.055);
-            border-radius: 13px;
+            background-color: rgba(255,255,255,0.048);
+            border: 1px solid rgba(255,255,255,0.055);
+            border-radius: 15px;
             padding: 9px 13px;
             min-height: 42px;
         }
 
         #setting_row:hover {
-            background-color: rgba(255,255,255,0.09);
+            background-color: rgba(150,205,255,0.075);
+            border: 1px solid rgba(255,255,255,0.10);
         }
 
         #setting_name {
@@ -1073,18 +1105,22 @@ class StartMenu(Gtk.Window):
         /* CHANGELOG TABS */
 
         #changelog_tab {
-            background-color: rgba(65,65,65,0.68);
-            border: 0;
+            background-color: rgb(32,92,125);
+            background-image: none;
+            border: 1px solid rgb(175,230,255);
             border-radius: 10px;
             padding: 7px 14px;
             min-width: 120px;
             min-height: 30px;
             font-size: 11px;
             font-weight: 900;
+            color: #dff3ff;
         }
 
         #changelog_tab:hover {
-            background-color: rgba(95,95,95,0.75);
+            background-color: rgb(75,180,235);
+            background-image: none;
+            border-color: rgb(200,235,255);
         }
 
         #changelog_tab:focus,
@@ -1095,8 +1131,9 @@ class StartMenu(Gtk.Window):
         }
 
         #notification_card {
-            background-color: rgba(55,55,60,0.94);
-            border: 1px solid rgba(255,255,255,0.08);
+            background-color: rgb(32,92,125);
+            background-image: none;
+            border: 1px solid rgb(175,230,255);
             border-radius: 13px;
             padding: 8px 11px;
         }
@@ -1104,36 +1141,39 @@ class StartMenu(Gtk.Window):
         #notification_icon {
             font-size: 16px;
             font-weight: 900;
+            color: #bfe8ff;
         }
 
         #notification_title {
             font-size: 10px;
             font-weight: 900;
+            color: #dff4ff;
         }
 
         #notification_text {
-            color: rgba(255,255,255,0.75);
+            color: rgba(225,245,255,0.82);
             font-size: 10px;
         }
 
         #notification_copy {
             background: transparent;
             border: 0;
-            color: #c9a7ff;
+            color: #e2f6ff;
             font-size: 10px;
             font-weight: 800;
         }
 
         #dialog {
-            background-color: rgba(72,70,78,0.94);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 18px;
+            background-color: rgba(19,24,35,0.84);
+            border: 1px solid rgba(255,255,255,0.13);
+            border-radius: 22px;
             padding: 13px;
         }
 
         #head {
-            background-color: rgba(80,78,88,0.55);
-            border-radius: 13px;
+            background-color: rgba(90,110,135,0.25);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 15px;
             padding: 10px;
         }
 
