@@ -31,7 +31,7 @@ Screenshots coming soon...
 
 Clone the repository:
 
-git clone https://github.com/YOUR_USERNAME/breeze-launcher.git
+git clone https://github.com/aditoxic-vibe/breeze-launcher.git
 cd breeze-launcher
 
 Run Breeze Launcher:
